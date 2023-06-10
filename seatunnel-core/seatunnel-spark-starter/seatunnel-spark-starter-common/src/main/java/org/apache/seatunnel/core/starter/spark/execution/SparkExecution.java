@@ -47,9 +47,13 @@ public class SparkExecution implements TaskExecution {
             sinkPluginExecuteProcessor;
 
     public SparkExecution(Config config) {
+        // 根据配置中 env 的 设置，创建SparkConf和SparkSession以及StreamingContext 上下文，说白了，就是把Spark对应的环境配置了起来
         this.sparkRuntimeEnvironment = SparkRuntimeEnvironment.getInstance(config);
         JobContext jobContext = new JobContext();
+        // 任务模式默认为 JobMode.BATCH
         jobContext.setJobMode(RuntimeEnvironment.getJobMode(config));
+
+        // 加载配置的插件
         this.sourcePluginExecuteProcessor =
                 new SourceExecuteProcessor(
                         sparkRuntimeEnvironment,

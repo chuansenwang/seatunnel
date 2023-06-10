@@ -46,6 +46,7 @@ public abstract class SparkAbstractPluginExecuteProcessor<T>
         this.sparkRuntimeEnvironment = sparkRuntimeEnvironment;
         this.jobContext = jobContext;
         this.pluginConfigs = pluginConfigs;
+        // 根据配置，加载插件
         this.plugins = initializePlugins(pluginConfigs);
     }
 

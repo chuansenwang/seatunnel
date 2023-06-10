@@ -90,6 +90,8 @@ public class SourceExecuteProcessor
     @Override
     protected List<SeaTunnelSource<?, ?, ?>> initializePlugins(
             List<? extends Config> pluginConfigs) {
+        // 从 D:\05 slef\seatunnel\seatunnel-common\connectors\seatunnel
+        // D:\05 slef\seatunnel\seatunnel-common\connectors\plugin-mapping.properties
         SeaTunnelSourcePluginDiscovery sourcePluginDiscovery = new SeaTunnelSourcePluginDiscovery();
         List<SeaTunnelSource<?, ?, ?>> sources = new ArrayList<>();
         Set<URL> jars = new HashSet<>();
@@ -101,6 +103,7 @@ public class SourceExecuteProcessor
                     sourcePluginDiscovery.getPluginJarPaths(Lists.newArrayList(pluginIdentifier)));
             SeaTunnelSource<?, ?, ?> seaTunnelSource =
                     sourcePluginDiscovery.createPluginInstance(pluginIdentifier);
+            // 解析插件，知道怎么处理数据
             seaTunnelSource.prepare(sourceConfig);
             seaTunnelSource.setJobContext(jobContext);
             sources.add(seaTunnelSource);

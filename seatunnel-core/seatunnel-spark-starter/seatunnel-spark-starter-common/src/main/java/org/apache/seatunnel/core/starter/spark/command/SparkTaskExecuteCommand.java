@@ -48,6 +48,7 @@ public class SparkTaskExecuteCommand implements Command<SparkCommandArgs> {
     public void execute() throws CommandExecuteException {
         Path configFile = FileUtils.getConfigPath(sparkCommandArgs);
         checkConfigExist(configFile);
+        // 根据配置文件路径，构造配置
         Config config = ConfigBuilder.of(configFile);
         if (!sparkCommandArgs.getJobName().equals(Constants.LOGO)) {
             config =

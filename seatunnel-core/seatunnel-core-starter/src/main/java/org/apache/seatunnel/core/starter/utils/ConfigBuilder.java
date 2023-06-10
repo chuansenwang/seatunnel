@@ -60,6 +60,7 @@ public class ConfigBuilder {
 
     public static Config of(@NonNull Path filePath) {
         log.info("Loading config file from path: {}", filePath);
+        // 通过文件后缀，通过SPI的形式获取对应的配置文件适配器，并对文件进行加解密
         Optional<ConfigAdapter> adapterSupplier = ConfigAdapterUtils.selectAdapter(filePath);
         Config config =
                 adapterSupplier

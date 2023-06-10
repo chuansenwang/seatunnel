@@ -107,6 +107,7 @@ public abstract class AbstractPluginDiscovery<T> implements PluginDiscovery<T> {
             Path pluginDir,
             Config pluginConfig,
             BiConsumer<ClassLoader, URL> addURLToClassLoaderConsumer) {
+        // SeaTunnelTransform D:\05 slef\seatunnel\seatunnel-common\lib
         this.pluginDir = pluginDir;
         this.pluginConfig = pluginConfig;
         this.addURLToClassLoaderConsumer = addURLToClassLoaderConsumer;
@@ -114,6 +115,7 @@ public abstract class AbstractPluginDiscovery<T> implements PluginDiscovery<T> {
     }
 
     protected static Config loadConnectorPluginConfig() {
+        // D:\05 slef\seatunnel\seatunnel-common\connectors\plugin-mapping.properties
         return ConfigFactory.parseFile(Common.connectorDir().resolve(PLUGIN_MAPPING_FILE).toFile())
                 .resolve(ConfigResolveOptions.defaults().setAllowUnresolved(true))
                 .resolveWith(
@@ -181,11 +183,13 @@ public abstract class AbstractPluginDiscovery<T> implements PluginDiscovery<T> {
     @Override
     public T createPluginInstance(PluginIdentifier pluginIdentifier, Collection<URL> pluginJars) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        // 获取对应的插件实例
         T pluginInstance = loadPluginInstance(pluginIdentifier, classLoader);
         if (pluginInstance != null) {
             log.info("Load plugin: {} from classpath", pluginIdentifier);
             return pluginInstance;
         }
+        // 没找到就去插件dir中找
         Optional<URL> pluginJarPath = getPluginJarPath(pluginIdentifier);
         // if the plugin jar not exist in classpath, will load from plugin dir.
         if (pluginJarPath.isPresent()) {
@@ -291,6 +295,7 @@ public abstract class AbstractPluginDiscovery<T> implements PluginDiscovery<T> {
     }
 
     private T loadPluginInstance(PluginIdentifier pluginIdentifier, ClassLoader classLoader) {
+        // SPI 根据类型，去类路径下，获取对应的插件 SeaTunnelSource SeaTunnelSink SeaTunnelTransform
         ServiceLoader<T> serviceLoader = ServiceLoader.load(getPluginBaseClass(), classLoader);
         for (T t : serviceLoader) {
             if (t instanceof PluginIdentifierInterface) {
